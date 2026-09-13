@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FlowSense — AI Problem Discovery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">✣</div>
+        <div><b>FlowSense</b><span>We find the problems you didn't know existed.</span></div>
+      </div>
+      <nav>
+        <button class="nav active" data-view="dashboard">▦ <span>Dashboard</span></button>
+        <button class="nav" data-view="discoveries">♧ <span>Discoveries</span><em id="navCount">7</em></button>
+        <button class="nav" data-view="analytics">⌁ <span>Analytics</span></button>
+        <button class="nav" data-view="journeys">♧ <span>User Journeys</span></button>
+        <button class="nav" data-view="systems">▤ <span>Systems</span></button>
+        <button class="nav" data-view="settings">⚙ <span>Settings</span></button>
+      </nav>
+      <div class="sidebar-note">
+        <div>✦</div>
+        <b>Smarter analysis.<br>Fewer blind spots.<br>Better experiences.</b>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="search">⌕ <input id="globalSearch" placeholder="Search findings, pages, or users..."></div>
+        <div class="top-actions"><span class="bell">♧</span><span class="avatar">A</span><span>Admin⌄</span></div>
+      </header>
+
+      <section id="view-dashboard" class="view active">
+        <div class="hero-head">
+          <div><h1>Good morning, Admin</h1><p>Here's what FlowSense found for you today.</p></div>
+          <div class="system-pill">● <span id="systemName">Workspace</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-icon bulb">✦</div><span>Total Discoveries</span><strong id="mDiscoveries">7</strong><small class="up">↑ 250% <i>vs. last 7 days</i></small></div>
+          <div class="stat"><div class="stat-icon users">♧</div><span>Users Analyzed</span><strong id="mUsers">4,832</strong><small class="up">↑ 138% <i>vs. last 7 days</i></small></div>
+          <div class="stat"><div class="stat-icon pulse">⌁</div><span>Systems Monitored</span><strong id="mSystems">1</strong><small><i id="systemLabel">Workspace</i></small></div>
+          <div class="stat"><div class="stat-icon clock">◷</div><span>Avg. Time to Detect</span><strong>2.4 hrs</strong><small class="up">↓ 62% <i>vs. manual review</i></small></div>
+        </div>
+
+        <div id="mainDiscovery" class="discovery-card">
+          <div class="discovery-title"><span class="new-dot">✦</span><div><small>NEW DISCOVERY</small><h2>Previously unreported problem detected</h2><p id="discoverySummary">18.4% of users repeatedly return between Product and Checkout.</p></div></div>
+          <div class="confidence"><span>High Confidence</span><b id="confidence">91%</b><div class="spark"></div></div>
+          <button class="primary" id="viewDiscovery">View Details →</button>
+          <div class="discovery-meta"><div><b>Impact↓</b><span id="impact">71% more likely to abandon</span></div><div><b>Affected Users</b><span id="affected">Mobile shoppers</span></div><div><b>Possible Cause</b><span id="cause">Shipping information may be unclear</span></div></div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head"><h3>User Journey Comparison</h3><div class="legend"><span>● Normal Flow</span><span>● Problem Flow</span></div></div>
+            <div class="chart-wrap"><canvas id="journeyChart"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Top Issues <small>(Last 7 Days)</small></h3></div>
+            <div id="issues"></div>
+          </div>
+        </div>
+
+        <div class="panel recent">
+          <div class="panel-head"><h3>Recent Discoveries</h3><button class="linkbtn" data-go="discoveries">View all →</button></div>
+          <div class="table" id="recentTable"></div>
+        </div>
+      </section>
+
+      <section id="view-discoveries" class="view">
+        <div class="page-head"><div><h1>Discoveries</h1><p>Potential problems surfaced from behavior, not complaints.</p></div><button class="primary" id="runAnalysis">✦ Run Analysis</button></div>
+        <div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="high">High impact</button><button class="filter" data-filter="new">New</button><button class="filter" data-filter="investigating">Investigating</button></div>
+        <div id="allDiscoveries" class="discovery-list"></div>
+      </section>
+
+      <section id="view-analytics" class="view">
+        <div class="page-head"><div><h1>Analytics</h1><p>Raw behavioral signals behind the discoveries.</p></div></div>
+        <div class="analytics-grid">
+          <div class="panel big"><h3>Event volume</h3><div class="chart-wrap tall"><canvas id="eventChart"></canvas></div></div>
+          <div class="panel"><h3>Behavior signals</h3><div id="signals"></div></div>
+        </div>
+      </section>
+
+      <section id="view-journeys" class="view">
+        <div class="page-head"><div><h1>User Journeys</h1><p>See where sessions flow normally — and where they start behaving differently.</p></div></div>
+        <div class="panel"><div class="journey-map" id="journeyMap"></div></div>
+      </section>
+
+      <section id="view-systems" class="view">
+        <div class="page-head"><div><h1>Systems</h1><p>Connect and monitor the products you want FrictionMap to investigate.</p></div><button class="primary" id="addSystem">＋ Add New System</button></div>
+        <div class="system-card"><div class="system-logo">◎</div><div><h3 id="systemCardName">Workspace</h3><p>Behavior events · Active monitoring</p></div><span class="status">● Active</span></div>
+        <div class="panel connector">
+          <div class="upload-header">
+            <div>
+              <h3>Upload your own event CSV</h3>
+              <p>Use a UTF-8 CSV file with one event per row. The app reads user behavior, session flow, timestamps, page names and device type to uncover friction patterns.</p>
+            </div>
+            <button class="secondary" id="loadSample">Use sample CSV</button>
+          </div>
+
+          <div class="file-type-row">
+            <span>Accepted: .csv</span>
+            <span>Required fields: user_id, session_id, timestamp, page, event, device</span>
+          </div>
+
+          <label class="upload">
+            <input id="fileInput" type="file" accept=".csv,text/csv">
+            <span>Choose CSV file</span>
+          </label>
+
+          <div id="uploadStatus" class="upload-status"></div>
+
+          <div class="schema-box">
+            <h4>Expected data shape</h4>
+            <pre>user_id,session_id,timestamp,page,event,device,product
+U1,S1,2026-09-09T10:00:00Z,Home,page_view,Mobile,Wireless Headset</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="page-head"><div><h1>Admin Settings</h1><p>Customize the system without changing the analysis engine.</p></div></div>
+        <div class="settings-grid">
+          <div class="panel"><h3>Workspace</h3><label>Workspace name<input id="workspaceName" value="Workspace"></label><label>Industry<select><option>E-commerce</option><option>Education</option><option>Healthcare</option><option>Finance</option><option>Custom</option></select></label><button class="primary" id="saveSettings">Save changes</button></div>
+          <div class="panel"><h3>Detection sensitivity</h3><label class="range-label">Anomaly sensitivity <b id="rangeValue">70%</b></label><input id="sensitivity" type="range" min="30" max="95" value="70"><p class="muted">Higher sensitivity surfaces more weak signals; lower sensitivity favors fewer, stronger discoveries.</p></div>
+          <div class="panel"><h3>Data mapping</h3><p class="muted">When importing your own data, the app looks for aliases such as <code>user_id</code>, <code>session_id</code>, <code>page</code>, <code>event</code>, <code>timestamp</code>, and <code>device</code>.</p><div id="mappingPreview" class="mapping"></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="modal" class="modal"><div class="modal-box"><button class="close" id="closeModal">×</button><div id="modalBody"></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>

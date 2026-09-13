@@ -1,0 +1,12 @@
+{
+  "name": "frictionmap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FrictionMap event intelligence dashboard",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python -m http.server 8000",
+    "deploy:netlify": "echo 'Static site is ready for Netlify deployment.'",
+    "deploy:vercel": "echo 'Static site is ready for Vercel deployment.'"
+  }
+}

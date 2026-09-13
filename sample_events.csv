@@ -1,0 +1,12 @@
+user_id,session_id,timestamp,page,event,device,product
+U1,S1,2026-09-09T10:00:00Z,Home,page_view,Mobile,Wireless Headset
+U1,S1,2026-09-09T10:00:20Z,Product,click,Mobile,Wireless Headset
+U1,S1,2026-09-09T10:00:40Z,Cart,click,Mobile,Wireless Headset
+U1,S1,2026-09-09T10:01:00Z,Product,back,Mobile,Wireless Headset
+U1,S1,2026-09-09T10:01:20Z,Cart,click,Mobile,Wireless Headset
+U1,S1,2026-09-09T10:01:40Z,Checkout,click,Mobile,Wireless Headset
+U2,S2,2026-09-09T11:00:00Z,Home,page_view,Desktop,Mechanical Keyboard
+U2,S2,2026-09-09T11:00:20Z,Product,click,Desktop,Mechanical Keyboard
+U2,S2,2026-09-09T11:00:40Z,Cart,click,Desktop,Mechanical Keyboard
+U2,S2,2026-09-09T11:01:00Z,Checkout,click,Desktop,Mechanical Keyboard
+U2,S2,2026-09-09T11:01:30Z,Checkout,abandon,Desktop,Mechanical Keyboard
