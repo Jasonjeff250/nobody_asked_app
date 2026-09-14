@@ -183,6 +183,22 @@ function normalizeRows(rows) {
   }));
 }
 
+function getTimeGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+function updateGreeting() {
+  const target = document.getElementById('timeGreeting');
+  if (!target) return;
+
+  const greeting = getTimeGreeting();
+  target.textContent = `${greeting}, Admin`;
+}
+
 function pct(numerator, denominator) {
   if (!denominator) return '0.0';
   return ((numerator / denominator) * 100).toFixed(1);
@@ -636,5 +652,6 @@ window.addEventListener('resize', () => {
   drawEventChart();
 });
 
+updateGreeting();
 state.events = seedData();
 render();
