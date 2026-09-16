@@ -69,6 +69,16 @@
     </div>
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const authShell = document.getElementById('authShell');
+      const appShell = document.getElementById('appShell');
+      if (authShell && appShell) {
+        authShell.classList.remove('hidden');
+        appShell.classList.add('hidden');
+      }
+    });
+  </script>
   <script src="/app.js"></script>
 </body>
 </html>

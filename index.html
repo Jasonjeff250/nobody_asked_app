@@ -217,6 +217,16 @@ U1,S1,2026-09-09T10:00:00Z,Home,page_view,Mobile,Wireless Headset</pre>
     </main>
   </div>
   <div id="modal" class="modal"><div class="modal-box"><button class="close" id="closeModal">×</button><div id="modalBody"></div></div></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const authShell = document.getElementById('authShell');
+      const appShell = document.getElementById('appShell');
+      if (authShell && appShell) {
+        authShell.classList.remove('hidden');
+        appShell.classList.add('hidden');
+      }
+    });
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
