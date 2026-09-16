@@ -1,13 +1,50 @@
 ﻿const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
+const authApi = {
+  async signup(email, password) {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    return response.json();
+  },
+  async verify(email, code) {
+    const response = await fetch('/api/auth/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code })
+    });
+    return response.json();
+  },
+  async login(email, password) {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    return response.json();
+  },
+  async me() {
+    const response = await fetch('/api/auth/me');
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data.user || null;
+  },
+  async logout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+  }
+};
+
 let state = {
   events: [],
   discoveries: [],
   workspace: 'Workspace',
   sensitivity: 70,
   mapping: {},
-  fileName: 'sample_events.csv'
+  fileName: 'sample_events.csv',
+  isAuthenticated: false
 };
 
 const aliasMap = {
@@ -529,8 +566,120 @@ function showView(name) {
   });
 }
 
+function showAuthView(name) {
+  $$('.auth-view').forEach((view) => view.classList.remove('active'));
+  const target = $('#' + name + 'View');
+  if (target) target.classList.add('active');
+}
+
+function setAuthAlert(message, isError = false) {
+  const alert = $('#authAlert');
+  if (!alert) return;
+  alert.textContent = message;
+  alert.classList.toggle('hidden', !message);
+  alert.classList.toggle('error', isError);
+}
+
+function renderAuthGate() {
+  const authShell = $('#authShell');
+  const appShell = $('#appShell');
+
+  if (state.isAuthenticated) {
+    authShell.classList.add('hidden');
+    appShell.classList.remove('hidden');
+    return;
+  }
+
+  authShell.classList.remove('hidden');
+  appShell.classList.add('hidden');
+}
+
 function setUploadMessage(message, isError = false) {
   $('#uploadStatus').innerHTML = `<p class="${isError ? 'error' : 'muted'}">${message}</p>`;
+}
+
+$('#connectShopify').onclick = () => {
+  const store = $('#shopifyStore').value.trim().toLowerCase();
+  if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(store)) {
+    $('#shopifyStatus').innerHTML = '<p class="error">Enter a valid your-store.myshopify.com domain.</p>';
+    return;
+  }
+  window.location.href = `/api/shopify?action=install&shop=${encodeURIComponent(store)}`;
+};
+
+async function initAuth() {
+  const user = await authApi.me();
+  state.isAuthenticated = Boolean(user);
+  renderAuthGate();
+
+  if (state.isAuthenticated) {
+    updateGreeting();
+    state.events = seedData();
+    render();
+  }
+}
+
+async function handleSignup(event) {
+  event.preventDefault();
+  const email = $('#signupEmail').value.trim();
+  const password = $('#signupPassword').value.trim();
+
+  const result = await authApi.signup(email, password);
+  if (!result.ok) {
+    setAuthAlert(result.error || 'Unable to create account.', true);
+    return;
+  }
+
+  $('#verifyEmail').value = email;
+  showAuthView('verify');
+  setAuthAlert(result.message || 'Confirmation code sent.');
+}
+
+async function handleVerify(event) {
+  event.preventDefault();
+  const email = $('#verifyEmail').value.trim();
+  const code = $('#verifyCode').value.trim();
+
+  const result = await authApi.verify(email, code);
+  if (!result.ok) {
+    setAuthAlert(result.error || 'Verification failed.', true);
+    return;
+  }
+
+  state.isAuthenticated = true;
+  renderAuthGate();
+  updateGreeting();
+  state.events = seedData();
+  render();
+  setAuthAlert('Email verified successfully.');
+}
+
+async function handleLogin(event) {
+  event.preventDefault();
+  const email = $('#loginEmail').value.trim();
+  const password = $('#loginPassword').value.trim();
+
+  const result = await authApi.login(email, password);
+  if (!result.ok) {
+    setAuthAlert(result.error || 'Login failed.', true);
+    return;
+  }
+
+  state.isAuthenticated = true;
+  renderAuthGate();
+  updateGreeting();
+  state.events = seedData();
+  render();
+  setAuthAlert('');
+}
+
+async function handleLogout() {
+  await authApi.logout();
+  state.isAuthenticated = false;
+  document.getElementById('loginForm').reset();
+  document.getElementById('signupForm').reset();
+  renderAuthGate();
+  setAuthAlert('You have been logged out.');
 }
 
 function render() {
@@ -571,6 +720,17 @@ $('#runAnalysis').onclick = () => {
   render();
   openDiscovery(state.discoveries[0]);
 };
+$('#logoutButton').onclick = handleLogout;
+$('#signupForm').onsubmit = handleSignup;
+$('#verifyForm').onsubmit = handleVerify;
+$('#loginForm').onsubmit = handleLogin;
+$$('[data-show]').forEach((button) => {
+  button.onclick = () => {
+    const view = button.dataset.show;
+    showAuthView(view);
+    setAuthAlert('');
+  };
+});
 
 $$('.filter').forEach((button) => {
   button.onclick = () => {
@@ -652,6 +812,4 @@ window.addEventListener('resize', () => {
   drawEventChart();
 });
 
-updateGreeting();
-state.events = seedData();
-render();
+initAuth();

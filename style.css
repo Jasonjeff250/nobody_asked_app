@@ -32,6 +32,116 @@ button, input, select {
   font: inherit;
 }
 
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: min(460px, 100%);
+  background: rgba(13, 26, 45, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: 0 20px 40px rgba(5, 10, 22, 0.18);
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.brand-block h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.brand-block p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.auth-view {
+  display: none;
+}
+
+.auth-view.active {
+  display: block;
+}
+
+.auth-view h2 {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+.auth-view label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.auth-view input {
+  border: 1px solid var(--line);
+  background: rgba(9, 18, 31, 0.9);
+  color: var(--text);
+  padding: 11px 12px;
+  border-radius: 10px;
+}
+
+.auth-button {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.auth-alert {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: rgba(54, 211, 153, 0.12);
+  border: 1px solid rgba(54, 211, 153, 0.3);
+  color: #dffaf3;
+}
+
+.auth-alert.error {
+  background: rgba(255, 125, 150, 0.08);
+  border-color: rgba(255, 125, 150, 0.25);
+  color: #ffd0d9;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.auth-switch {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  color: #b7c7ff;
+  padding: 0;
+  cursor: pointer;
+}
+
+.helper-text {
+  color: var(--muted);
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -116,6 +226,10 @@ button, input, select {
 .sidebar-note div {
   color: #8b78ff;
   font-size: 18px;
+}
+
+.logout-button {
+  margin: 12px 10px 0;
 }
 
 .main {

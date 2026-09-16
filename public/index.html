@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FrictionMap — Secure Access</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="brand-block">
+        <div class="brand-mark">✣</div>
+        <div>
+          <h1>FrictionMap</h1>
+          <p>We find the problems you didn't know existed.</p>
+        </div>
+      </div>
+
+      <div id="authAlert" class="auth-alert hidden"></div>
+
+      <div id="signupView" class="auth-view active">
+        <h2>Create your account</h2>
+        <form id="signupForm">
+          <label>
+            <span>Email</span>
+            <input id="signupEmail" type="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="signupPassword" type="password" placeholder="At least 8 characters" required>
+          </label>
+          <button type="submit" class="primary auth-button">Create account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <button type="button" class="link-button" data-show="login">Log in</button></p>
+      </div>
+
+      <div id="verifyView" class="auth-view">
+        <h2>Verify your email</h2>
+        <p class="helper-text">A confirmation code was sent to your email. Enter it below to continue.</p>
+        <form id="verifyForm">
+          <label>
+            <span>Email</span>
+            <input id="verifyEmail" type="email" readonly>
+          </label>
+          <label>
+            <span>Confirmation code</span>
+            <input id="verifyCode" type="text" maxlength="6" placeholder="123456" required>
+          </label>
+          <button type="submit" class="primary auth-button">Verify email</button>
+        </form>
+      </div>
+
+      <div id="loginView" class="auth-view">
+        <h2>Sign in</h2>
+        <form id="loginForm">
+          <label>
+            <span>Email</span>
+            <input id="loginEmail" type="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="loginPassword" type="password" placeholder="Your password" required>
+          </label>
+          <button type="submit" class="primary auth-button">Log in</button>
+        </form>
+        <p class="auth-switch">Need an account? <button type="button" class="link-button" data-show="signup">Sign up</button></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

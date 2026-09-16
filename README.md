@@ -9,6 +9,8 @@ python -m http.server 8000
 
 Then open http://localhost:8000 in your browser.
 
+For a deployed backend, this project is configured for Netlify. Netlify uses the functions in `netlify/functions/`; the `/api/*` redirect keeps the Shopify URLs working.
+
 ## What is included
 - Default loaded sample dataset from `sample_events.csv`
 - CSV upload flow inside the app
@@ -16,7 +18,8 @@ Then open http://localhost:8000 in your browser.
 - Auto-detection for common behavioral event aliases
 - Discovery dashboard, analytics and journey views
 - Lightweight local heuristics for common friction signals
-- Publish-ready static front end that can be deployed to Netlify, Vercel, GitHub Pages, or any static host
+- Shopify connection in the Systems view
+- Netlify backend for Shopify OAuth and event ingestion
 
 ## Accepted data format
 The app accepts UTF-8 CSV files with one event per row.
@@ -40,5 +43,46 @@ U1,S1,2026-09-09T10:00:20Z,Product,click,Mobile,Wireless Headset
 U1,S1,2026-09-09T10:00:40Z,Cart,click,Mobile,Wireless Headset
 U1,S1,2026-09-09T10:01:40Z,Checkout,click,Mobile,Wireless Headset
 
-## Important
-This is a client-side product prototype ready for hosting and further backend integration. It does not store data outside the browser session unless you add a backend later.
+## Shopify setup
+
+In Netlify, open **Site configuration → Environment variables** and add:
+
+- `APP_URL`: your deployed Netlify URL
+- `SHOPIFY_API_KEY`: Shopify Partner app client ID
+- `SHOPIFY_API_SECRET`: Shopify Partner app secret
+- `SHOPIFY_SCOPES`: for example `read_products,read_orders`
+- `SUPABASE_URL`: your Supabase project URL
+- `SUPABASE_SERVICE_ROLE_KEY`: server-only Supabase secret
+- `TOKEN_ENCRYPTION_KEY`: a private encryption secret
+
+Create the `shopify_connections` table in Supabase before connecting a store. Set the Shopify app callback URL to:
+
+`https://your-site.netlify.app/api/shopify?action=callback`
+
+Then open Systems in FrictionMap, enter the store domain, and click **Connect Shopify**. Shopify will ask the store owner to approve access. After approval, the encrypted token is saved in Supabase.
+
+Create this event table before enabling Shopify storefront events:
+
+```sql
+create table behavior_events (
+	id uuid primary key default gen_random_uuid(),
+	source text not null,
+	shop_domain text,
+	user_id text,
+	session_id text,
+	timestamp timestamptz not null,
+	page text,
+	event text,
+	device text,
+	product text,
+	created_at timestamptz default now()
+);
+```
+
+Shopify storefront events posted to `/api/shopify` are stored in `behavior_events`.
+
+### Netlify setup
+
+Deploy the repository with `netlify.toml` at the project root. After deployment, use `https://your-site.netlify.app/api/shopify?action=install&shop=your-store.myshopify.com` for Shopify installation.
+
+Shopify credentials and Supabase secrets must remain server-side. The CSV workflow remains local and unchanged.

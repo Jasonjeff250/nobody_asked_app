@@ -10,11 +10,73 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-shell">
+  <div id="authShell" class="auth-shell">
+    <div class="auth-card">
+      <div class="brand-block">
+        <div class="brand-mark">✣</div>
+        <div>
+          <h1>FrictionMap</h1>
+          <p>We find the problems you didn't know existed.</p>
+        </div>
+      </div>
+
+      <div id="authAlert" class="auth-alert hidden"></div>
+
+      <div id="signupView" class="auth-view active">
+        <h2>Create your account</h2>
+        <form id="signupForm">
+          <label>
+            <span>Email</span>
+            <input id="signupEmail" type="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="signupPassword" type="password" placeholder="At least 8 characters" required>
+          </label>
+          <button type="submit" class="primary auth-button">Create account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <button type="button" class="link-button" data-show="login">Log in</button></p>
+      </div>
+
+      <div id="verifyView" class="auth-view">
+        <h2>Verify your email</h2>
+        <p class="helper-text">A confirmation code was sent to your email. Enter it below to continue.</p>
+        <form id="verifyForm">
+          <label>
+            <span>Email</span>
+            <input id="verifyEmail" type="email" readonly>
+          </label>
+          <label>
+            <span>Confirmation code</span>
+            <input id="verifyCode" type="text" maxlength="6" placeholder="123456" required>
+          </label>
+          <button type="submit" class="primary auth-button">Verify email</button>
+        </form>
+      </div>
+
+      <div id="loginView" class="auth-view">
+        <h2>Sign in</h2>
+        <form id="loginForm">
+          <label>
+            <span>Email</span>
+            <input id="loginEmail" type="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="loginPassword" type="password" placeholder="Your password" required>
+          </label>
+          <button type="submit" class="primary auth-button">Log in</button>
+        </form>
+        <p class="auth-switch">Need an account? <button type="button" class="link-button" data-show="signup">Sign up</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="appShell" class="app-shell hidden">
     <aside class="sidebar">
       <div class="brand">
         <div class="brand-mark">✣</div>
-        <div><b>FlowSense</b><span>We find the problems you didn't know existed.</span></div>
+        <div><b>FrictionMap</b><span>We find the problems you didn't know existed.</span></div>
       </div>
       <nav>
         <button class="nav active" data-view="dashboard">▦ <span>Dashboard</span></button>
@@ -28,6 +90,7 @@
         <div>✦</div>
         <b>Smarter analysis.<br>Fewer blind spots.<br>Better experiences.</b>
       </div>
+      <button id="logoutButton" class="secondary logout-button">Log out</button>
     </aside>
 
     <main class="main">
@@ -113,6 +176,7 @@
       <section id="view-systems" class="view">
         <div class="page-head"><div><h1>Systems</h1><p>Connect and monitor the products you want FrictionMap to investigate.</p></div><button class="primary" id="addSystem">＋ Add New System</button></div>
         <div class="system-card"><div class="system-logo">◎</div><div><h3 id="systemCardName">Workspace</h3><p>Behavior events · Active monitoring</p></div><span class="status">● Active</span></div>
+        <div class="panel connector"><h3>Shopify</h3><p class="muted">Connect a Shopify store so FrictionMap can receive storefront behavior and analyze it alongside your CSV data.</p><label>Store domain<input id="shopifyStore" placeholder="your-store.myshopify.com" autocomplete="url"></label><button class="primary" id="connectShopify">Connect Shopify</button><div id="shopifyStatus" class="upload-status" role="status" aria-live="polite"></div></div>
         <div class="panel connector">
           <div class="upload-header">
             <div>

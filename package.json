@@ -2,11 +2,22 @@
   "name": "frictionmap",
   "version": "1.0.0",
   "private": true,
-  "description": "FrictionMap event intelligence dashboard",
+  "description": "FrictionMap event intelligence dashboard with email verification auth",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "serve": "python -m http.server 8000",
-    "deploy:netlify": "echo 'Static site is ready for Netlify deployment.'",
-    "deploy:vercel": "echo 'Static site is ready for Vercel deployment.'"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "deploy:netlify": "echo 'Deploy this project through Netlify using netlify.toml.'"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-session": "^1.19.0",
+    "nodemailer": "^6.9.14"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
