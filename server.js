@@ -108,6 +108,12 @@ app.post('/api/auth/signup', async (req, res) => {
     await sendVerificationEmail(email, code);
     return res.status(201).json({ ok: true, message: 'Confirmation code sent. Check your email to verify your account.' });
   } catch (error) {
+    console.error('[auth] Confirmation email failed:', {
+      message: error.message,
+      code: error.code,
+      responseCode: error.responseCode,
+      command: error.command
+    });
     verificationCodes.delete(email);
     users.delete(email);
     return res.status(500).json({ ok: false, error: 'Unable to send confirmation email. Please try again later.' });
