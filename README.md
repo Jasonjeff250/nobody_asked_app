@@ -85,4 +85,13 @@ Shopify storefront events posted to `/api/shopify` are stored in `behavior_event
 
 Deploy the repository with `netlify.toml` at the project root. After deployment, use `https://your-site.netlify.app/api/shopify?action=install&shop=your-store.myshopify.com` for Shopify installation.
 
+For sign-up confirmation emails, add these variables in Netlify under **Site configuration → Environment variables**. They are used by the `auth` function and must not be committed to the repository:
+
+- `SMTP_USER`: the email account used to send messages
+- `SMTP_PASS`: an SMTP password or Gmail app password
+- `SMTP_HOST`: optional, defaults to `smtp.gmail.com`
+- `SMTP_PORT`: optional, defaults to `587`
+- `SMTP_SECURE`: optional, set to `true` only for TLS-on-connect SMTP servers
+- `SENDER_EMAIL`: optional, the verified From address (defaults to `SMTP_USER`)
+
 Shopify credentials and Supabase secrets must remain server-side. The CSV workflow remains local and unchanged.

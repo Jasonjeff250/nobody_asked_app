@@ -6,6 +6,7 @@ function createRequest(event) {
 
   return {
     method: event.httpMethod || 'GET',
+    path: event.path || '',
     body,
     query: event.queryStringParameters || {},
     headers: event.headers || {}
